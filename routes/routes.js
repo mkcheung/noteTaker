@@ -1,8 +1,9 @@
 'use strict';
+
 module.exports = function(app) {
-  var NoteController = require('../controllers/NoteController');
+  var NotesController = require('../controllers/NotesController');
 
   app.route('/')
-    .get(NoteController.getNotes);
+    .post(NotesController.readNotes);
 
 };
