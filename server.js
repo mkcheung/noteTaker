@@ -7,28 +7,30 @@ var express = require('express'),
   http = require("http"),
   mongoose = require('mongoose'); // needed to connect to the database
 
+// load the specific model
+require('./models/Book'); 
+require('./models/Chapter'); 
+require('./models/Note');
 
 app.use(cors());
-
-// mongoose instance connection url connection
+const mongoDB = 'mongodb://localhost:27017/notes';
 mongoose.Promise = global.Promise;
+var db = mongoose.connect(mongoDB, function(error){
+    if(error) console.log(error);
+
+        console.log("connection successful");
+});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+// mongoose instance connection url connection
 //set up the connection to the database
 // mongoose.connect('mongodb://localhost/multichat'); 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.use(expressSession({
-//   secret: 'supersecretsecret',
-//   resave: false,
-//   saveUnititialized: true
-// }));
-// app.set('view engine', 'pug');
 const routes = require('./routes/routes');
 
-// app.get('/', routes.index);
-// app.get('/oauth', routes.oauth);
-// app.get('/oauth_callback', routes.oauth_callback);
-// app.get('/clear', routes.clear);
+
 routes(app); //register the route
 
 const server = http.createServer(app);
